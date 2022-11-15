@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
 import express from 'express';
+import 'express-async-errors'
+import errorMiddleware from './middlewares/errorMiddleware';
 import UserRouter from './routes/user.route';
 
 const PORT = process.env.API_PORT || 3010;
@@ -15,6 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', UserRouter);
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
