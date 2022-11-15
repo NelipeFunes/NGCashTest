@@ -25,6 +25,7 @@ services:
     restart: always
     ports:
       - 5432:5432
+      - 3306:3306
     environment:
       POSTGRES_PASSWORD: 415263
       POSTGRES_USER: root

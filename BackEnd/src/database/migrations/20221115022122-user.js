@@ -21,6 +21,7 @@ module.exports = {
       account_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        field: 'account_id',
         references: {
           model: 'accounts',
           key: 'id',

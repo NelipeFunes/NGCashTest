@@ -39,9 +39,9 @@ User.init({
   timestamps: false,
 });
 
-Account.belongsTo(User, { foreignKey: 'id', as: 'accountId' } );
+Account.belongsTo(User, { foreignKey: 'id', as: 'account_id' } );
 
-User.hasOne(Account, { foreignKey: 'id', as: 'accountId' } );
+User.hasOne(Account, { foreignKey: 'id', as: 'account_id' } );
 
 
 
