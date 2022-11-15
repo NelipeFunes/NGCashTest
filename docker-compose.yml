@@ -1,0 +1,40 @@
+
+version: "3.9"
+
+services:
+  # frontend:
+  #   container_name: app_frontend
+  #   build: ./frontend
+  #   ports:
+  #     - 3005:3005
+  #   working_dir: /app-frontend
+  #   depends_on:
+  #     - backend
+
+  backend:
+    container_name: app_backend
+    build: ./backend
+    ports:
+      - 3010:3010
+    working_dir: /app-backend
+    tty: true
+    depends_on:
+      - db
+    environment:
+      - API_PORT=3010
+      - DB_NAME=ng_db
+      - DB_USER=root
+      - DB_PASS=415263
+      - DB_HOST=db
+      - DB_PORT=5432
+
+  db:
+    image: postgres:15
+    container_name: db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=415263
+      - POSTGRES_USER=root
+      - POSTGRES_DB=ng_db
