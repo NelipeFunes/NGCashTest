@@ -9,8 +9,8 @@ app.use(express.json());
 
 const PORT = process.env.API_PORT || 3010;
 
-app.get('/tests', (req, res) => {
-  res.status(200).send(`Rodando na porta ${PORT}`)
+app.get('/', (req, res) => {
+  res.status(200).send(`Rodando na porta ${PORT}`);
 });
 
 app.listen(PORT, () => {

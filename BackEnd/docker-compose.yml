@@ -17,9 +17,6 @@ services:
     ports:
       - 3010:3010
     environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      HOSTNAME: db
       JWT_SECRET: secretJWT
   db:
     container_name: ngcash_test_db
@@ -27,7 +24,10 @@ services:
     platform: linux/x86_64
     restart: always
     ports:
-      - 3306:3306
-      - 33060:33060
+      - 5432:5432
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: 415263
+      POSTGRES_USER: root
+      POSTGRES_DB: ng_db
+
+
