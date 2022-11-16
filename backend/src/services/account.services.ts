@@ -35,6 +35,7 @@ const AccountServices = {
       { where: { id } }
     );
   },
+
 };
 
 export default AccountServices;

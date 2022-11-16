@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { ErrorHandler } from '../middlewares/errorMiddleware';
+import { IReqUser } from '../interfaces';
 import UserService from '../services/user.services';
 import Token from '../utils/token';
 
@@ -19,8 +21,11 @@ const UserController = {
     return res.status(200).json({ jwt: token });
   },
 
-  async getById(req: Request, res: Response) {
-    const user = await UserService.getById(+req.params.id);
+  async getById(req: IReqUser, res: Response) {
+    if (!req.user) {
+      throw new ErrorHandler('Invalid token', 401);
+    }
+    const user = await UserService.getById(Number(req.user?.id));
     return res.status(200).json(user);
   },
 };
