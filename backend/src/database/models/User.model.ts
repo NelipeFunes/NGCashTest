@@ -9,41 +9,41 @@ class User extends Model {
   accountId!: number;
 }
 
-User.init({
-  id: {
-    allowNull: false,
-    type: INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
+User.init(
+  {
+    id: {
+      allowNull: false,
+      type: INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+
+    username: {
+      allowNull: false,
+      type: STRING,
+      unique: true,
+    },
+
+    password: {
+      allowNull: false,
+      type: STRING,
+    },
+
+    accountId: {
+      allowNull: false,
+      type: INTEGER,
+      field: 'account_id',
+    },
   },
+  {
+    sequelize: db,
+    modelName: 'users',
+    timestamps: false,
+  }
+);
 
-  username: {
-    allowNull: false,
-    type: STRING,
-    unique: true,
-  },
+Account.belongsTo(User, { foreignKey: 'id', as: 'account_id' });
 
-  password: {
-    allowNull: false,
-    type: STRING
-  },
+User.hasOne(Account, { foreignKey: 'id', as: 'account_id' });
 
-  accountId: {
-    allowNull: false,
-    type: INTEGER,
-    field: 'account_id'
-  },
-
-}, {
-  sequelize: db,
-  modelName: 'users',
-  timestamps: false,
-});
-
-Account.belongsTo(User, { foreignKey: 'id', as: 'account_id' } );
-
-User.hasOne(Account, { foreignKey: 'id', as: 'account_id' } );
-
-
-
-export default User
+export default User;

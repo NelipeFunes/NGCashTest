@@ -6,22 +6,25 @@ class Account extends Model {
   balance!: number;
 }
 
-Account.init({
-  id: {
-    allowNull: false,
-    type: INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
+Account.init(
+  {
+    id: {
+      allowNull: false,
+      type: INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+
+    balance: {
+      allowNull: false,
+      type: INTEGER,
+    },
   },
-
-  balance: {
-    allowNull: false,
-    type: INTEGER,
+  {
+    sequelize: db,
+    modelName: 'accounts',
+    timestamps: false,
   }
-}, {
-  sequelize: db,
-  modelName: 'accounts',
-  timestamps: false,
-});
+);
 
-export default Account
+export default Account;

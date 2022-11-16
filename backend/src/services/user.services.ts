@@ -1,15 +1,17 @@
-import { ErrorHandler } from './../middlewares/errorMiddleware';
-import { compare, hash } from 'bcryptjs'
-import User from "../database/models/User.model"
+import { compare, hash } from 'bcryptjs';
+import { ErrorHandler } from '../middlewares/errorMiddleware';
+import User from '../database/models/User.model';
 import IUser from '../interfaces/IUser';
 import AccountServices from './account.services';
 
+const NOT_FOUND = 'User not found';
+
 const UserService = {
-  validateBody(username: string, password:string) {
-    const rgx = /^(?=.*[0-9])(?=.*[A-Z]).{8,}$/
-    const passwordTest = rgx.test(password)
+  validateBody(username: string, password: string) {
+    const rgx = /^(?=.*[0-9])(?=.*[A-Z]).{8,}$/;
+    const passwordTest = rgx.test(password);
     if (!username || !password) {
-      throw new ErrorHandler('missing fields', 400)
+      throw new ErrorHandler('missing fields', 400);
     }
 
     if (username.length < 3) {
@@ -34,19 +36,43 @@ const UserService = {
     this.validateBody(username, password);
     const accountId = await AccountServices.createAccount();
     const hashedPassword = await hash(password, 10);
-    const user = await User.create({ username, password: hashedPassword, accountId });
+    const user = await User.create({
+      username,
+      password: hashedPassword,
+      accountId,
+    });
     return user;
   },
 
   async login({ username, password }: IUser): Promise<User> {
-    this.validateBody(username,password)
-    const user = await User.findOne({ where: { username }});
-    if (!user) throw new ErrorHandler('User not found', 404);
+    this.validateBody(username, password);
+    const user = await User.findOne({ where: { username } });
+    if (!user) throw new ErrorHandler(NOT_FOUND, 404);
     const validatePassword = await compare(password, user.password);
     if (!validatePassword) throw new ErrorHandler('Invalid password', 400);
     return user;
-  }
+  },
 
-}
+  async getByUsername(username: string) {
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      throw new ErrorHandler(NOT_FOUND, 404);
+    }
+    return user;
+  },
 
-export default UserService
+  async getById(id: number) {
+    const user = await User.findOne({ where: { id } });
+    if (!user) {
+      throw new ErrorHandler(NOT_FOUND, 404);
+    }
+    const account = await AccountServices.getAccount(user.accountId);
+
+    return {
+      username: user.username,
+      balance: account.balance,
+    };
+  },
+};
+
+export default UserService;

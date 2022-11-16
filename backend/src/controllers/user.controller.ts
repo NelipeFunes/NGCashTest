@@ -1,12 +1,11 @@
-import { Request, Response } from "express";
-import { compare } from 'bcryptjs'
-import UserService from "../services/user.services"
-import Token from "../utils/token";
+import { Request, Response } from 'express';
+import UserService from '../services/user.services';
+import Token from '../utils/token';
 
 const UserController = {
   async getUsers(_req: Request, res: Response) {
     const users = await UserService.getUsers();
-    res.status(200).json(users)
+    res.status(200).json(users);
   },
 
   async registerUser(req: Request, res: Response) {
@@ -16,9 +15,14 @@ const UserController = {
 
   async login(req: Request, res: Response) {
     const user = await UserService.login(req.body);
-    const JWT = Token.makeToken(user);
-    return res.status(200).json({ JWT });
-  }
+    const token = Token.makeToken(user);
+    return res.status(200).json({ jwt: token });
+  },
+
+  async getById(req: Request, res: Response) {
+    const user = await UserService.getById(+req.params.id);
+    return res.status(200).json(user);
+  },
 };
 
-export default UserController
+export default UserController;
