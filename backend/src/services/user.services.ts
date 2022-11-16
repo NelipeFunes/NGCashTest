@@ -1,4 +1,5 @@
 import { ErrorHandler } from './../middlewares/errorMiddleware';
+import { compare, hash } from 'bcryptjs'
 import User from "../database/models/User.model"
 import IUser from '../interfaces/IUser';
 import AccountServices from './account.services';
@@ -32,8 +33,20 @@ const UserService = {
   async registerUser({ username, password }: IUser) {
     this.validateBody(username, password);
     const accountId = await AccountServices.createAccount();
-    const user = await User.create({ username, password, accountId });
+    const hashedPassword = await hash(password, 10);
+    const user = await User.create({ username, password: hashedPassword, accountId });
     return user;
   },
+
+  async login({ username, password }: IUser): Promise<User> {
+    this.validateBody(username,password)
+    const user = await User.findOne({ where: { username }});
+    if (!user) throw new ErrorHandler('User not found', 404);
+    const validatePassword = await compare(password, user.password);
+    if (!validatePassword) throw new ErrorHandler('Invalid password', 400);
+    return user;
+  }
+
 }
+
 export default UserService

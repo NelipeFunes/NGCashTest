@@ -27,6 +27,7 @@ services:
       - DB_PASS=415263
       - DB_HOST=db
       - DB_PORT=5432
+      - JWT_SECRET=jwtsecret
 
   db:
     image: postgres:15

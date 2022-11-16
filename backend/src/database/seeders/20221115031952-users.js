@@ -2,17 +2,17 @@ module.exports = {
   up: async (queryInterface) => {
     await queryInterface.bulkInsert('users', [
       {
-        username: 'Felipe',       
-        password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW',
+        username: 'FelipeNunes',       
+        password: '$2a$10$pY3Qmdl7zNXGMqbB0Mf.CeB3b5WLHs3OhMUC5f4hujXm6/4VcT2AG',
         account_id: 1
-          // senha: secret_admin
+          // senha: Felipe415263
       },
 
       {
         username: 'User',
-        password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO', 
+        password: '$2a$10$9euviNihHi0BDR49tD4T2OVGBVSR5xzFqwEDobfB4lUpHWwOLaAQa', 
         account_id: 2
-          // senha: secret_user
+          // senha: User415263
       },
     ], {});
   },
