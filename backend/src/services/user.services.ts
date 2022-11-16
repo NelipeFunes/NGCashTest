@@ -34,10 +34,18 @@ const UserService = {
 
   async registerUser({ username, password }: IUser) {
     this.validateBody(username, password);
+    const userLow = username.toLowerCase();
+    const exist = await User.findOne({
+      where: { username: userLow },
+    });
+    if (exist) {
+      throw new ErrorHandler('Username must be unique', 401);
+    }
+
     const accountId = await AccountServices.createAccount();
     const hashedPassword = await hash(password, 10);
     const user = await User.create({
-      username,
+      username: userLow,
       password: hashedPassword,
       accountId,
     });
@@ -46,7 +54,8 @@ const UserService = {
 
   async login({ username, password }: IUser): Promise<User> {
     this.validateBody(username, password);
-    const user = await User.findOne({ where: { username } });
+    const userLow = username.toLowerCase();
+    const user = await User.findOne({ where: { username: userLow } });
     if (!user) throw new ErrorHandler(NOT_FOUND, 404);
     const validatePassword = await compare(password, user.password);
     if (!validatePassword) throw new ErrorHandler('Invalid password', 400);
@@ -54,7 +63,8 @@ const UserService = {
   },
 
   async getByUsername(username: string) {
-    const user = await User.findOne({ where: { username } });
+    const userLow = username.toLowerCase();
+    const user = await User.findOne({ where: { username: userLow } });
     if (!user) {
       throw new ErrorHandler(NOT_FOUND, 404);
     }

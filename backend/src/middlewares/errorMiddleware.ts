@@ -10,6 +10,7 @@ export class ErrorHandler extends Error {
 
 const errorMiddleware = (err: ErrorHandler, _req: Request, res: Response, _next: NextFunction) => {
   const { message, code } = err;
+
   if (code) {
     return res.status(code).json({ message });
   }
