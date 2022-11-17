@@ -5,13 +5,15 @@ import tokenMiddleware from '../middlewares/tokenMiddleware';
 
 const TransactionRouter = Router();
 
-TransactionRouter.route('/create').post(
-  tokenMiddleware,
-  TransactionController.createTransaction
-);
-
-TransactionRouter.route('/').get(tokenMiddleware, TransactionController.getAllTransactions);
-
-TransactionRouter.route('/:id').get(TransactionController.getTransactionsById);
+TransactionRouter.route('/create')
+  .post(tokenMiddleware, TransactionController.createTransaction,);
+TransactionRouter.route('/credited')
+  .get(tokenMiddleware, TransactionController.getCreditedTransactions);
+TransactionRouter.route('/debited')
+  .get(tokenMiddleware, TransactionController.getDebitedTransactions);
+TransactionRouter.route('/dated')
+  .post(tokenMiddleware, TransactionController.getDatedTransactions);
+TransactionRouter.route('/')
+  .get(tokenMiddleware, TransactionController.getTransactionsById);
 
 export default TransactionRouter;

@@ -30,12 +30,13 @@ module.exports = {
     
       value: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(10,2),
       },
     
       created_at: {
         allowNull: true,
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
+        defaultValue: Sequelize.fn('now'),
       },
     });
   },

@@ -1,4 +1,4 @@
-import { Model, INTEGER, DATE } from 'sequelize';
+import { Model, INTEGER,DECIMAL, DATEONLY} from 'sequelize';
 import db from '.';
 import Account from './Account.model';
 
@@ -33,13 +33,12 @@ Transaction.init(
 
     value: {
       allowNull: false,
-      type: INTEGER,
+      type: DECIMAL(10,2),
     },
 
     createdAt: {
       allowNull: true,
-      type: DATE,
-      defaultValue: Date(),
+      type: DATEONLY,
       field: 'created_at',
     },
   },

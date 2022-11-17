@@ -18,20 +18,22 @@ const AccountServices = {
     return account;
   },
 
-  async addValue(value: number, id: number) {
+  async addValue(value: string, id: number) {
     const account = await Account.findOne({ where: { id } });
     if (!account) throw new ErrorHandler(NOT_FOUND, 404);
+    const newBalance = Number(account.balance) + Number(value);
     await Account.update(
-      { balance: account.balance + value },
+      { balance: newBalance },
       { where: { id } }
     );
   },
 
-  async subValue(value: number, id: number) {
+  async subValue(value: string, id: number) {
     const account = await Account.findOne({ where: { id } });
     if (!account) throw new ErrorHandler(NOT_FOUND, 404);
+    const newBalance = Number(account.balance) - Number(value);
     await Account.update(
-      { balance: account.balance - value },
+      { balance: newBalance },
       { where: { id } }
     );
   },

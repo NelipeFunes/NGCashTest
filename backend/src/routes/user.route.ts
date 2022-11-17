@@ -4,7 +4,6 @@ import tokenMiddleware from '../middlewares/tokenMiddleware';
 
 const UserRouter = Router();
 
-UserRouter.route('/lossantos').get(UserController.getUsers);
 UserRouter.route('/register').post(UserController.registerUser);
 UserRouter.route('/login').post(UserController.login);
 UserRouter.route('/').get(tokenMiddleware, UserController.getById);

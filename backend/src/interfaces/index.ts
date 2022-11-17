@@ -13,7 +13,7 @@ export interface IReqUser extends Request {
 export interface ITransaction {
   debitedAccountId: number;
   creditedAccountId: number;
-  value: number;
+  value: string;
 }
 
 export interface IUser {

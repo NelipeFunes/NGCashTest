@@ -31,11 +31,6 @@ const UserService = {
     }
   },
 
-  async getUsers() {
-    const users = await User.findAll();
-    return users;
-  },
-
   async registerUser({ username, password }: IUser) {
     this.validateBody(username, password);
     const userLow = this.normalizeUser(username);
@@ -57,7 +52,6 @@ const UserService = {
   },
 
   async login({ username, password }: IUser) {
-    this.validateBody(username, password);
     const userLow = this.normalizeUser(username);
     const user = await User.findOne({ where: { username: userLow } });
     if (!user) throw new ErrorHandler(NOT_FOUND, 404);
