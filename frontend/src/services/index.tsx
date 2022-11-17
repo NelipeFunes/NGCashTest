@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { LoginRes } from '../interface';
+import { LoginResponse } from '../interface';
 
 
 const api = axios.create({
@@ -7,14 +7,13 @@ const api = axios.create({
 });
 
 const LoginFuncs = {
-  async makeLogin(username: string, password: string):Promise<string> {
+  async makeLogin(username: string, password: string) {
     try {
-      const { jwt } = await api.post('/users/login', { username, password }) as LoginRes
-      console.log(jwt);
+      const {data: { jwt }} = await api.post('/users/login', { username, password }) as LoginResponse
       return jwt
     } catch (error: any) {
-      console.log(error);
-      return error
+      const { response:{ data: { message }} } = error
+      return message
     };
   },
 };
