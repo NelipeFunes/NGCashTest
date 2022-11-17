@@ -72,26 +72,27 @@ const TransactionServices = {
   async getCreditedTransactions(id: number) {
     const transactions = await this.getTransactionsById(id);
 
-    if (transactions.length === 0) {
+    const creditedTransactions = transactions.filter(
+      (transaction) => Number(transaction.creditedAccountId) === id,
+    );
+
+    if (creditedTransactions.length === 0) {
       throw new ErrorHandler(NOT_FOUND, 404);
     }
 
-    const creditedTransactions = transactions.filter(
-      (transaction) => transaction.creditedAccountId === id,
-    );
     return creditedTransactions;
   },
 
   async getDebitedTransactions(id: number) {
     const transactions = await this.getTransactionsById(id);
 
-    if (transactions.length === 0) {
+    const debitedTransactions = transactions.filter(
+      (transaction) => Number(transaction.debitedAccountId) === id,
+    );
+
+    if (debitedTransactions.length === 0) {
       throw new ErrorHandler(NOT_FOUND, 404);
     }
-
-    const debitedTransactions = transactions.filter(
-      (transaction) => transaction.debitedAccountId === id,
-    );
     return debitedTransactions;
   },
 
