@@ -38,7 +38,6 @@ export default function LoginPage() {
   const logIn = async () => {
     const res = await userApi(username, password, 'login');
     if (res !== 'Invalid password' && res !== 'User not found') {
-      alert('Logged in successfully');
       localStorage.removeItem('token')
       localStorage.setItem('token', res);
       rememberMeBtn();

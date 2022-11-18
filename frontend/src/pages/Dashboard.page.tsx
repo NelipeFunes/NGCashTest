@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import { TranssactionsRes } from "../interface";
 import ComboBox from '../components/AutoComplete'
-import { getAccount, getCreditedTransactionsDated, getDebitedTransactionsDated, getTransactions, getTransactionsCredited, getTransactionsDated, getTransactionsDebited, getUsernames, makeTransfer } from "../services";
+import { 
+  getAccount, getCreditedTransactionsDated, getDebitedTransactionsDated, 
+  getTransactions, getTransactionsCredited, getTransactionsDated, getTransactionsDebited, 
+  makeTransfer } from "../services";
 import './Dashboard.page.css'
 
 export default function Dashboard() {
@@ -130,18 +135,46 @@ export default function Dashboard() {
   const realizeTransfer = async () => {
     const user = localStorage.getItem('userTrans');
     if (!user) {
-      return alert('Cash-in account not selected')
+      return confirmAlert({
+        title: 'Error',
+        message: 'Cash-in account not selected',
+        buttons: [{ label: 'Ok' }]
+      });
     }
-    const res = await makeTransfer(token, user, value);
-    if (res === 'insufficient funds') {
-      alert('Insuficient funds!')
-    }
-    if (res === 'value must be greater than 0') {
-      alert('value must be greater than 0!')
-    }
+    const transferFunc = async () => {
+      const res = await makeTransfer(token, user, value);
+      if (res === 'insufficient funds') {
+        confirmAlert({
+          title: 'Error',
+          message: 'Insufficient funds',
+          buttons: [{ label: 'Ok' }]
+        });
+      }
+      if (res === 'value must be greater than 0') {
+        confirmAlert({
+          title: 'Error',
+          message: 'Value must be greater than 0',
+          buttons: [{ label: 'Ok' }]
+        });
+      }
     
     await getBalance(token);
     await getTransFromDB(token)
+    }
+    const text = `Are you sure you to make a transfer to ${user}, in the value of R$ ${Number(value).toFixed(2)}?`;
+    confirmAlert({
+      title: 'Confirmation',
+      message: text,
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => transferFunc(),
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
   }
 
   return (

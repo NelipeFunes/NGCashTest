@@ -25,7 +25,6 @@ export default function RegisterPage() {
       res !== PASSCOMPLE &&
       res !== UNIQUEUSER
       ) {
-      alert('Signed up with sucess!');
       localStorage.removeItem('token');
       localStorage.setItem('token', res);
       navigate('/dashboard');
