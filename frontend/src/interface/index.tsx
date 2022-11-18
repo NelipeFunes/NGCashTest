@@ -13,3 +13,17 @@ export interface ITransaction {
   value: string,
   createdAt: string
 }
+
+interface IAccount {
+  id: number;
+  username: string;
+  accountId: number;
+}
+
+export interface TranssactionsRes {
+  id: number;
+  debitedAccount: IAccount;
+  creditedAccount: IAccount;
+  value: string;
+  createdAt: string
+}

@@ -78,9 +78,10 @@ const UserService = {
     if (!user) {
       throw new ErrorHandler(NOT_FOUND, 404);
     }
-    const account = await AccountServices.getAccount(user.accountId);
+    const account = await AccountServices.getAccountById(user.accountId);
 
     return {
+      id: account.id,
       username: user.username,
       balance: account.balance,
     };

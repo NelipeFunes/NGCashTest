@@ -20,3 +20,17 @@ export interface IUser {
   username: string;
   password: string;
 }
+
+interface IAccount {
+  id: number;
+  username: string;
+  balance: string;
+}
+
+export interface TranssactionsRes {
+  id: number;
+  debitedAccount: IAccount;
+  creditedAccount: IAccount;
+  value: string;
+  createdAt: string
+}

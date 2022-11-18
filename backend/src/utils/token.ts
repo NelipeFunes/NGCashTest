@@ -11,7 +11,7 @@ const secret = process.env.JWT_SECRET || 'jwtsecret';
 const Token = {
   makeToken({ id, username, accountId }: IPayload) {
     const token = sign({ id, username, accountId }, secret, {
-      expiresIn: '1h',
+      expiresIn: '24h',
     });
     return token;
   },

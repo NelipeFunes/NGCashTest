@@ -41,8 +41,48 @@ async function getTransactions(authorization: string) {
   };
 };
 
+async function getTransactionsCredited(authorization: string) {
+  try {
+    const { data } = await api.get('/transactions/credited', {
+      headers: { authorization },
+    });
+    return data
+  } catch (error: any) {
+    const { response: { data: { message } } } = error
+    return message
+  };
+};
+
+async function getTransactionsDebited(authorization: string) {
+  try {
+    const { data } = await api.get('/transactions/debited', {
+      headers: { authorization },
+    });
+    return data
+  } catch (error: any) {
+    const { response: { data: { message } } } = error
+    return message
+  };
+};
+
+async function getTransactionsDated(authorization: string, date:string) {
+  try {
+    const { data } = await api.post('/transactions/dated', { date }, {
+      headers: { authorization },
+    });
+    return data
+  } catch (error: any) {
+    const { response: { data: { message } } } = error
+    return message
+  };
+};
+
+
 export {
   userApi,
   getAccount,
   getTransactions,
+  getTransactionsCredited,
+  getTransactionsDebited,
+  getTransactionsDated,
 }

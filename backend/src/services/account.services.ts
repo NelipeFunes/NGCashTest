@@ -10,7 +10,7 @@ const AccountServices = {
     return account.id;
   },
 
-  async getAccount(id: number) {
+  async getAccountById(id: number) {
     const account = await Account.findOne({ where: { id } });
     if (!account) {
       throw new ErrorHandler(NOT_FOUND, 404);

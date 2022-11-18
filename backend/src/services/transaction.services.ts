@@ -1,9 +1,11 @@
+import { TranssactionsRes } from './../interfaces/index';
 /* eslint-disable max-lines-per-function */
 import { Op } from 'sequelize';
 import { ITransaction } from '../interfaces/index';
 import Transaction from '../database/models/Transaction.model';
 import { ErrorHandler } from '../middlewares/errorMiddleware';
 import AccountServices from './account.services';
+import UserService from './user.services';
 
 const NOT_FOUND = 'No transaction has been found';
 
@@ -34,7 +36,7 @@ const TransactionServices = {
   async createTransaction({
     debitedAccountId, creditedAccountId, value,
   }: ITransaction, accountId: number) {
-    const user1 = await AccountServices.getAccount(debitedAccountId);
+    const user1 = await AccountServices.getAccountById(debitedAccountId);
 
     this.validateTransaction({
       debitedAccountId, creditedAccountId, value,
@@ -66,14 +68,29 @@ const TransactionServices = {
       throw new ErrorHandler(NOT_FOUND, 404);
     }
 
-    return transactions;
+    const mappedTransactions = await Promise.all(transactions
+      .map(async ({id, value, createdAt, creditedAccountId, debitedAccountId}) => {
+        const {id: debId, username} = await UserService
+          .getById(debitedAccountId);
+        const {id: creId, username: username2}= await UserService
+          .getById(creditedAccountId);
+        const obj = {
+          id,
+          value,
+          debitedAccount: { id: debId, username, accountId: debitedAccountId },
+          creditedAccount: { id: creId, username: username2, accountId: creditedAccountId },
+          createdAt,
+        }
+        return obj;
+    }));
+    return mappedTransactions
   },
 
   async getCreditedTransactions(id: number) {
-    const transactions = await this.getTransactionsById(id);
+    const transactions: TranssactionsRes[] | any = await this.getTransactionsById(id);
 
     const creditedTransactions = transactions.filter(
-      (transaction) => Number(transaction.creditedAccountId) === id,
+      (transaction: TranssactionsRes) => Number(transaction.creditedAccount.id) === id,
     );
 
     if (creditedTransactions.length === 0) {
@@ -84,10 +101,10 @@ const TransactionServices = {
   },
 
   async getDebitedTransactions(id: number) {
-    const transactions = await this.getTransactionsById(id);
+    const transactions: TranssactionsRes[] | any  = await this.getTransactionsById(id);
 
     const debitedTransactions = transactions.filter(
-      (transaction) => Number(transaction.debitedAccountId) === id,
+      (transaction: TranssactionsRes) => Number(transaction.debitedAccount.id) === id,
     );
 
     if (debitedTransactions.length === 0) {
@@ -106,9 +123,24 @@ const TransactionServices = {
 
     if (transactions.length === 0) {
       throw new ErrorHandler(NOT_FOUND, 404);
-    }
+    };
+    const mappedTransactions = await Promise.all(transactions
+      .map(async ({id, value, createdAt, creditedAccountId, debitedAccountId}) => {
+        const {id: debId, username} = await UserService
+          .getById(debitedAccountId);
+        const {id: creId, username: username2}= await UserService
+          .getById(creditedAccountId);
+        const obj = {
+          id,
+          value,
+          debitedAccount: { id: debId, username, accountId: debitedAccountId },
+          creditedAccount: { id: creId, username: username2, accountId: creditedAccountId },
+          createdAt,
+        }
+        return obj;
+    }));
 
-    return transactions;
+    return mappedTransactions;
   },
 };
 
