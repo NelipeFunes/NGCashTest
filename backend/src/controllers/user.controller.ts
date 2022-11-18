@@ -8,7 +8,8 @@ const UserController = {
 
   async registerUser(req: Request, res: Response) {
     const user = await UserService.registerUser(req.body);
-    return res.status(201).json(user);
+    const token = Token.makeToken(user);
+    return res.status(201).json({ jwt: token });
   },
 
   async login(req: Request, res: Response) {

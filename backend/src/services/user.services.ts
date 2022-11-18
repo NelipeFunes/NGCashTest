@@ -23,7 +23,7 @@ const UserService = {
     }
 
     if (password.length < 8) {
-      throw new ErrorHandler('passowrd must be at least 8 characters', 401);
+      throw new ErrorHandler('password must be at least 8 characters', 401);
     }
 
     if (!passwordTest) {
@@ -48,7 +48,7 @@ const UserService = {
       password: hashedPassword,
       accountId,
     });
-    return { username: user.username, accountId: user.accountId };
+    return { id: user.id, username: user.username, accountId: user.accountId };
   },
 
   async login({ username, password }: IUser) {

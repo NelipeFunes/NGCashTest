@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginFuncs from "../services";
+import { userApi } from "../services";
 import "./Login.page.css"
 
 
 export default function LoginPage() {
-  const { makeLogin } = LoginFuncs;
   const navigate = useNavigate();
 
   const [username, setUser] = useState('');
@@ -16,7 +15,6 @@ export default function LoginPage() {
   
   const rememberMeBtn = () => {
     const btn = document.getElementById('rememberBtn') as HTMLInputElement;
-    setRememberBtn(btn.checked);
     if (btn.checked === false) {
       localStorage.removeItem('userInfos')
     } else {
@@ -31,12 +29,15 @@ export default function LoginPage() {
   };
 
   const logIn = async () => {
-    const token = await makeLogin(username, password);
-    if (token !== 'Invalid password') {
+    const res = await userApi(username, password, 'login');
+    if (res !== 'Invalid password' && res !== 'User not found') {
+      alert('Logged in successfully');
       localStorage.removeItem('token')
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', res);
       rememberMeBtn();
       navigate('/dashboard');
+    } else {
+      alert(res);
     };
   }
 
@@ -84,7 +85,7 @@ export default function LoginPage() {
           <input type="password" value={password}  onChange={({ target }) => setPass(target.value)}/>
           <button type="button" disabled={btnState} onClick={() => logIn()}>Login</button>
           <label>
-            <input type="checkbox" id="rememberBtn" checked={rememberBtn} onClick={() => rememberMeBtn()}/>
+            <input type="checkbox" id="rememberBtn" checked={rememberBtn} onChange={ ({ target }) => setRememberBtn(target.checked) }/>
             <span>Remember me</span>
           </label>
         </div>
