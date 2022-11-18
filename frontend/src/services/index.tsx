@@ -77,6 +77,57 @@ async function getTransactionsDated(authorization: string, date:string) {
   };
 };
 
+async function getCreditedTransactionsDated(authorization: string, date:string) {
+  try {
+    const { data } = await api.post('/transactions/dated/credited', { date }, {
+      headers: { authorization },
+    });
+    return data
+  } catch (error: any) {
+    const { response: { data: { message } } } = error
+    return message
+  };
+};
+
+async function getDebitedTransactionsDated(authorization: string, date:string) {
+  try {
+    const { data } = await api.post('/transactions/dated/debited', { date }, {
+      headers: { authorization },
+    });
+    return data
+  } catch (error: any) {
+    const { response: { data: { message } } } = error
+    return message
+  };
+};
+
+async function getUsernames(authorization:string) {
+  try {
+    const { data } = await api.get('/users/names',{
+      headers: { authorization },
+    });
+    return data;
+  } catch (error: any) {
+    const { response: { data: { message } } } = error;
+    return message;
+  }
+}
+
+const makeTransfer = async (authorization: string, username:string, value:number) => {
+  try {
+    const { data: { accountId } } = await api.post('/users/',{ username },{
+      headers: { authorization },
+    });
+    const { data } = await api.post('/transactions/create', { creditedAccountId: accountId, value }, {
+      headers: { authorization },
+    });
+    
+    return data;
+  } catch (error: any) {
+    const { response: { data: { message } } } = error;
+    return message;
+  }
+}
 
 export {
   userApi,
@@ -85,4 +136,8 @@ export {
   getTransactionsCredited,
   getTransactionsDebited,
   getTransactionsDated,
+  getCreditedTransactionsDated,
+  getDebitedTransactionsDated,
+  getUsernames,
+  makeTransfer,
 }

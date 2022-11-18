@@ -3,6 +3,7 @@ import { ErrorHandler } from '../middlewares/errorMiddleware';
 import User from '../database/models/User.model';
 import { IUser } from '../interfaces';
 import AccountServices from './account.services';
+import { password } from '../database/config/database';
 
 const NOT_FOUND = 'User not found';
 
@@ -66,7 +67,12 @@ const UserService = {
 
   async getByUsername(username: string) {
     const userLow = this.normalizeUser(username);
-    const user = await User.findOne({ where: { username: userLow } });
+    const user = await User.findOne({
+      attributes: {
+        exclude: [ 'password' ],
+      },
+      where: { username: userLow } 
+    } );
     if (!user) {
       throw new ErrorHandler(NOT_FOUND, 404);
     }
@@ -86,6 +92,12 @@ const UserService = {
       balance: account.balance,
     };
   },
+
+  async getUsernames(username:string) {
+    const users = await User.findAll();
+    const mappedUsers = users.map((user) => user.username);
+    return mappedUsers.filter((name) => name !== username);
+  }
 };
 
 export default UserService;

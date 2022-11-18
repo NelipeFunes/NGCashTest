@@ -27,3 +27,4 @@ export interface TranssactionsRes {
   value: string;
   createdAt: string
 }
+

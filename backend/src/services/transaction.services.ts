@@ -1,5 +1,5 @@
-import { TranssactionsRes } from './../interfaces/index';
 /* eslint-disable max-lines-per-function */
+import { TranssactionsRes } from './../interfaces/index';
 import { Op } from 'sequelize';
 import { ITransaction } from '../interfaces/index';
 import Transaction from '../database/models/Transaction.model';
@@ -16,7 +16,6 @@ const TransactionServices = {
       creditedAccountId,
       debitedAccountId,
       value }: ITransaction,
-    accountId: number,
   ) {
     if (!creditedAccountId || !debitedAccountId || !value) {
       throw new ErrorHandler('missing fields', 401);
@@ -24,23 +23,19 @@ const TransactionServices = {
 
     if (Number(value) < 1) throw new ErrorHandler('value must be greater than 0', 401);
 
-    if (debitedAccountId !== accountId) {
-      throw new ErrorHandler('You cannot use money from other account', 401);
-    }
-
     if (debitedAccountId === creditedAccountId) {
       throw new ErrorHandler('An account cannot send money to itself', 401);
     }
   },
 
   async createTransaction({
-    debitedAccountId, creditedAccountId, value,
-  }: ITransaction, accountId: number) {
+    creditedAccountId, value,
+  }: ITransaction, debitedAccountId: number) {
     const user1 = await AccountServices.getAccountById(debitedAccountId);
 
     this.validateTransaction({
       debitedAccountId, creditedAccountId, value,
-    }, accountId);
+    });
 
     if (Number(user1.balance) < Number(value)) {
       throw new ErrorHandler('insufficient funds', 401);

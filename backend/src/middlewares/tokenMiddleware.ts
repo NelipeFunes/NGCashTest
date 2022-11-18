@@ -9,6 +9,8 @@ const NOT_FOUND = 'Token not found';
 const INVALID_TOKEN = 'Must be a valid token';
 
 const tokenMiddleware = async (req: IReqUser, res:Response, next: NextFunction) => {
+  console.log(req);
+  
   const { authorization: auth } = req.headers;
   if (!auth) {
     throw new ErrorHandler(NOT_FOUND, 404);
