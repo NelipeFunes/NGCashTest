@@ -82,7 +82,7 @@ const TransactionServices = {
   },
 
   async getCreditedTransactions(id: number) {
-    const transactions: TranssactionsRes[] | any = await this.getTransactionsById(id);
+    const transactions: TranssactionsRes[] = await this.getTransactionsById(id);
 
     const creditedTransactions = transactions.filter(
       (transaction: TranssactionsRes) => Number(transaction.creditedAccount.id) === id,
@@ -96,7 +96,7 @@ const TransactionServices = {
   },
 
   async getDebitedTransactions(id: number) {
-    const transactions: TranssactionsRes[] | any  = await this.getTransactionsById(id);
+    const transactions: TranssactionsRes[] = await this.getTransactionsById(id);
 
     const debitedTransactions = transactions.filter(
       (transaction: TranssactionsRes) => Number(transaction.debitedAccount.id) === id,

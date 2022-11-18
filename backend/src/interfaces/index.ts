@@ -1,10 +1,12 @@
 import { Request } from 'express';
+import { Jwt } from 'jsonwebtoken';
 
 interface IToken {
   id: number;
   username: string;
   accountId: number;
 }
+
 
 export interface IReqUser extends Request {
   user?: IToken
@@ -24,13 +26,12 @@ export interface IUser {
 interface IAccount {
   id: number;
   username: string;
-  balance: string;
 }
 
 export interface TranssactionsRes {
   id: number;
   debitedAccount: IAccount;
   creditedAccount: IAccount;
-  value: string;
-  createdAt: string
+  value: number;
+  createdAt: Date
 }

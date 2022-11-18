@@ -6,7 +6,7 @@ import tokenMiddleware from '../middlewares/tokenMiddleware';
 const TransactionRouter = Router();
 
 TransactionRouter.route('/create')
-  .post(tokenMiddleware, TransactionController.createTransaction,);
+  .post(tokenMiddleware, TransactionController.createTransaction);
 TransactionRouter.route('/credited')
   .get(tokenMiddleware, TransactionController.getCreditedTransactions);
 TransactionRouter.route('/debited')
