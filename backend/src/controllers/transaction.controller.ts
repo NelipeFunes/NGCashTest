@@ -39,6 +39,18 @@ const TransactionController = {
       .getDatedTransactions(req.body.date, Number(req.user?.accountId));
     return res.status(200).json(transactions);
   },
+
+  async getDatedCreditedTrans(req: IReqUser, res: Response) {
+    const transactions = await TransactionServices
+      .getDatedCreditedTrans(req.body.date, Number(req.user?.accountId));
+    return res.status(200).json(transactions)
+  },
+  
+  async getDatedDebitedTrans(req: IReqUser, res: Response) {
+    const transactions = await TransactionServices
+      .getDatedDebitedTrans(req.body.date, Number(req.user?.accountId));
+    return res.status(200).json(transactions)
+  }
 };
 
 export default TransactionController;

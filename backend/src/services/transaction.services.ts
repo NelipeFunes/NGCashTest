@@ -142,6 +142,22 @@ const TransactionServices = {
 
     return mappedTransactions;
   },
+
+  async getDatedCreditedTrans(date:string, id:number) {
+    const transactions = await this.getDatedTransactions(date, id);
+    const filteredTrans = transactions.filter((transaction) => 
+      transaction.creditedAccount.accountId === id
+    )
+    return filteredTrans;
+  },
+
+  async getDatedDebitedTrans(date:string, id:number) {
+    const transactions = await this.getDatedTransactions(date, id);
+    const filteredTrans = transactions.filter((transaction) => 
+      transaction.debitedAccount.accountId === id
+    )
+    return filteredTrans;
+  }
 };
 
 export default TransactionServices;

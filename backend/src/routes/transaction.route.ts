@@ -13,6 +13,10 @@ TransactionRouter.route('/debited')
   .get(tokenMiddleware, TransactionController.getDebitedTransactions);
 TransactionRouter.route('/dated')
   .post(tokenMiddleware, TransactionController.getDatedTransactions);
+TransactionRouter.route('/dated/credited')
+  .post(tokenMiddleware, TransactionController.getDatedCreditedTrans);
+TransactionRouter.route('/dated/debited')
+  .post(tokenMiddleware, TransactionController.getDatedDebitedTrans);
 TransactionRouter.route('/')
   .get(tokenMiddleware, TransactionController.getTransactionsById);
 
