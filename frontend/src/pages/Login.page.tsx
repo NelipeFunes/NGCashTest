@@ -1,4 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import IconButton from "@material-ui/core/IconButton";
+import InputLabel from "@material-ui/core/InputLabel";
+import Visibility from "@material-ui/icons/Visibility";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Input from "@material-ui/core/Input";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../services";
 import "./Login.page.css"
@@ -10,6 +16,7 @@ export default function LoginPage() {
   const [username, setUser] = useState('');
   const [password, setPass] = useState('');
   const [btnState, setBtnState] = useState(true);
+  const [passwordShown, setPasswordShown] = useState(false);
   const [rememberBtn, setRememberBtn] = useState(false)
 
   
@@ -79,10 +86,27 @@ export default function LoginPage() {
           <span>Enter your credentials to continue</span>
         </div>
         <div>
-          <span>Username: </span>
-          <input type="text" value={username} onChange={({ target }) => setUser(target.value)} />
-          <span>Password: </span>
-          <input type="password" value={password}  onChange={({ target }) => setPass(target.value)}/>
+          <InputLabel>
+            <span>Username: </span>
+            <Input type="text" value={username} onChange={({ target }) => setUser(target.value)} />
+          </InputLabel>
+          <InputLabel>
+            <span>Password: </span>
+            <Input
+              type={passwordShown ? "text" : "password"}
+              onChange={({ target }: any) => setPass(target.value)}
+              value= { password }
+              endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setPasswordShown(!passwordShown)}
+                >
+                  {passwordShown ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+              }
+            />
+          </InputLabel>
           <button type="button" disabled={btnState} onClick={() => logIn()}>Login</button>
           <label>
             <input type="checkbox" id="rememberBtn" checked={rememberBtn} onChange={ ({ target }) => setRememberBtn(target.checked) }/>
