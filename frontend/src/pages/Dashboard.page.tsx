@@ -164,7 +164,7 @@ export default function Dashboard() {
     await getBalance(token);
     await getTransFromDB(token)
     }
-    const text = `Are you sure you to make a transfer to ${user}, in the value of R$ ${Number(value).toFixed(2)}?`;
+    const text = `Are you sure you want to make a transfer to ${user}, in the value of R$ ${Number(value).toFixed(2)}?`;
     confirmAlert({
       title: 'Confirmation',
       message: text,
