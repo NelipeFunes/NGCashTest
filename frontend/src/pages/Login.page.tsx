@@ -17,7 +17,8 @@ export default function LoginPage() {
 
   
   const rememberMeBtn = () => {
-    if (rememberBtn === false) {
+    const btn = document.getElementById('rememberMeBtn') as HTMLInputElement;
+    if (btn.checked === false) {
       localStorage.removeItem('userInfos')
     } else {
       localStorage.removeItem('userInfos');
@@ -69,7 +70,7 @@ export default function LoginPage() {
     }
     localStorage.removeItem('token');
     checkRememberBtn();
-  }, [])
+  }, []);
 
   return (
     <Container id="main-container" className="d-grid h-100 main-container">
@@ -83,14 +84,14 @@ export default function LoginPage() {
         <p className="fs-6 text-muted">Enter your credentials to continue</p>
         <Form.Group controlId='sign-in-username'>
           <Form.Control type='text' size='lg' value={ username } 
-            placeholder='Username'  className='position-relative' onChange={ ({ target }) => setUser(target.value)} />
+            placeholder='Username'  className='position-relative' onChange={ ({ target }) => {setUser(target.value);}} />
         </Form.Group>
         <Form.Group className='mb-3 mt-1' controlId="sign-in-password">
           <Form.Control type='password' value={ password } size='lg'
-            placeholder='Password' className='position-relative' onChange={ ({ target }) => setPass(target.value)} />
+            placeholder='Password' className='position-relative' onChange={ ({ target }) => {setPass(target.value);}} />
         </Form.Group>
         <Form.Group className="d-flex justify-content-center mb-4" controlId="sign-in-rememberBtn">
-          <Form.Check label="Remember me" checked={ rememberBtn } onChange={ () => setRememberBtn(!rememberBtn) }/>
+          <Form.Check label="Remember me" id="rememberMeBtn" checked={ rememberBtn } onChange={ ({ target }) => { setRememberBtn(target.checked) } } />
         </Form.Group>
         <div className="d-grid">
         <Button variant="primary" size="lg" disabled={signInBtn} onClick={() => {logIn();rememberMeBtn()}}>Sign in</Button>
