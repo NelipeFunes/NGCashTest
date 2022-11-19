@@ -14,6 +14,23 @@ body {
   position: absolute;
 }
 
+.Transactions {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-left: 220px;
+  color: white;
+}
+
+.form-control:focus {
+  z-index: 5;
+}
+
+.transaction-card {
+  width: 200px;
+  border: 2px solid white;
+}
+
 .footer {
   bottom: 0;
   width: 100%;

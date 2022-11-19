@@ -25,12 +25,15 @@ export interface ISideBar {
   balance: string;
   date: string;
   debBtn: boolean;
-  credBtn: boolean
+  credBtn: boolean;
+  data: Array<string>;
   logoff: () => void;
   setDate: (date:string) => void;
   setDebBtn: (bool:boolean) => void
   setCredBtn: (bool:boolean) => void
   setDateBtn: (bool:boolean) => void
+  setValue: (num:number) => void
   filterTransactions: () => TransactionsRes[] | any
+  realizeTransfer: () => void
 }
 

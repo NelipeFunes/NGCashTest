@@ -3,27 +3,27 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { TransactionsRes } from "../interface";
-// import ComboBox from '../components/AutoComplete'
 import { 
   getAccount, getCreditedTransactionsDated, getDebitedTransactionsDated, 
   getTransactions, getTransactionsCredited, getTransactionsDated, getTransactionsDebited, 
+  getUsernames, 
   makeTransfer } from "../services";
 import './Dashboard.page.css'
 
-import { Button, Container, Form } from "react-bootstrap";
 import SideBar from "../components/Sidebar";
+import TransactionsTable from "../components/Table";
 
 export default function Dashboard() {
   const [balance, setBalance] = useState('');
   const [username, setUser] = useState('');
-  const [value, setValue] = useState(0);
   const [token, setToken] = useState('');
   const [transactions, setTransactions] = useState([]);
   const [credBtn, setCredBtn] = useState(false);
   const [debBtn, setDebBtn] = useState(false);
   const [dateBtn, setDateBtn] = useState(false);
   const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+  const [value, setValue] = useState(0);
+  const [users, setUsers] = useState([])
 
   const navigate = useNavigate();
 
@@ -62,28 +62,24 @@ export default function Dashboard() {
       await getTransFromDB(token);
       await getBalance(token);
     }
+
+    const getNames = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Token not found');
+        return navigate('/');
+      };
+      const res = await getUsernames(token);
+      if (res === 'Must be a valid token') {
+        alert('Not valid token, redirecting to login page');
+        return navigate('/');
+      }
+      setUsers(res)
+    };
     
     getInfos();
+    getNames();
   }, []);
-
-  const renderTransactions = () => {
-    const normalizeName = (name: string) =>  name[0].toUpperCase() + name.substring(1);
-    if (transactions.length < 1) {
-      return 'No transactions have been found';
-    }
-    const arara = transactions.map((transaction: TransactionsRes) => 
-    <div key={transaction.id} className="transaction-container">
-      <span>{`From: ${normalizeName(transaction.debitedAccount.username)}`}</span>
-      <br />
-      <span>{`To: ${normalizeName(transaction.creditedAccount.username)}`}</span>
-      <br />
-      <span>{`Value: ${transaction.value}`}</span>
-      <br />
-      <span>{`Fullfilled: ${moment(transaction.createdAt).format('DD/MM/YYYY')}`}</span>
-    </div>
-    )
-    return arara;
-  }
 
   const filterTransactions = async () => {
     if (dateBtn === true && credBtn === true) {
@@ -139,66 +135,75 @@ export default function Dashboard() {
     })
   }
 
-  // const realizeTransfer = async () => {
-  //   const user = localStorage.getItem('userTrans');
-  //   if (!user) {
-  //     return confirmAlert({
-  //       title: 'Error',
-  //       message: 'Cash-in account not selected',
-  //       buttons: [{ label: 'Ok' }]
-  //     });
-  //   }
-  //   const transferFunc = async () => {
-  //     const res = await makeTransfer(token, user, value);
-  //     if (res === 'insufficient funds') {
-  //       confirmAlert({
-  //         title: 'Error',
-  //         message: 'Insufficient funds',
-  //         buttons: [{ label: 'Ok' }]
-  //       });
-  //     }
-  //     if (res === 'value must be greater than 0') {
-  //       confirmAlert({
-  //         title: 'Error',
-  //         message: 'Value must be greater than 0',
-  //         buttons: [{ label: 'Ok' }]
-  //       });
-  //     }
+  const realizeTransfer = async () => {
+    const user = localStorage.getItem('userTrans');
+    if (!user) {
+      return confirmAlert({
+        title: 'Error',
+        message: 'Cash-in account not selected',
+        buttons: [{ label: 'Ok' }]
+      });
+    }
+    const transferFunc = async () => {
+      const res = await makeTransfer(token, user, value);
+      if (res === 'insufficient funds') {
+        confirmAlert({
+          title: 'Error',
+          message: 'Insufficient funds',
+          buttons: [{ label: 'Ok' }]
+        });
+      }
+      if (res === 'value must be greater than 0') {
+        confirmAlert({
+          title: 'Error',
+          message: 'Value must be greater than 0',
+          buttons: [{ label: 'Ok' }]
+        });
+      }
     
-  //   await getBalance(token);
-  //   await getTransFromDB(token)
-  //   }
-  //   const text = `Are you sure you to make a transfer to ${user}, in the value of R$ ${Number(value).toFixed(2)}?`;
-  //   confirmAlert({
-  //     title: 'Confirmation',
-  //     message: text,
-  //     buttons: [
-  //       {
-  //         label: 'Yes',
-  //         onClick: () => transferFunc(),
-  //       },
-  //       {
-  //         label: 'No',
-  //       }
-  //     ]
-  //   });
-  // }
+    await getBalance(token);
+    await getTransFromDB(token)
+    }
+    const text = `Are you sure you to make a transfer to ${user}, in the value of R$ ${Number(value).toFixed(2)}?`;
+    confirmAlert({
+      title: 'Confirmation',
+      message: text,
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => transferFunc(),
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
+  }
 
   return (
     <div>
-      <SideBar 
-        username={username}
-        balance={balance}
-        date={date}
-        credBtn={credBtn}
-        debBtn={debBtn}
-        setDate={setDate}
-        logoff={logOff}
-        setCredBtn={setCredBtn}
-        setDebBtn={setDebBtn}
-        setDateBtn={setDateBtn}
-        filterTransactions={filterTransactions}
+      <nav>
+        <SideBar 
+          username={username}
+          balance={balance}
+          date={date}
+          credBtn={credBtn}
+          debBtn={debBtn}
+          data={users}
+          setDate={setDate}
+          logoff={logOff}
+          setCredBtn={setCredBtn}
+          setDebBtn={setDebBtn}
+          setDateBtn={setDateBtn}
+          setValue={setValue}
+          filterTransactions={filterTransactions}
+          realizeTransfer={realizeTransfer}
         />
+      </nav>
+      <div className="Transactions">
+          { transactions.length === 0 ? 'No transactions have been found' 
+            : <TransactionsTable  transactions={transactions}/> }
+      </div>
     </div>
   )
 }

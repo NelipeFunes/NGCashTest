@@ -1,13 +1,25 @@
-import React from 'react'
-import { Button } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Button, Modal } from 'react-bootstrap'
+import { Typeahead } from 'react-bootstrap-typeahead';
 import Form from 'react-bootstrap/Form'
 import { ISideBar } from '../interface'
 import "./Sidebar.css"
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 export default function SideBar({
-  username , balance, date,credBtn, debBtn, 
-  logoff, setDate, setDebBtn, setCredBtn, setDateBtn, filterTransactions
+  username , balance, date,credBtn, debBtn, data,
+  logoff, setDate, setDebBtn, setCredBtn, setDateBtn, filterTransactions, setValue, realizeTransfer
 }: ISideBar) {
+  const [showModal, setModal] = useState(false);
+
+  const saveUserTrans = (e: any) => {
+    if (!e) {
+      return localStorage.removeItem('userTrans');
+    }
+
+    localStorage.setItem('userTrans', e[0]);
+  }
+
   return (
     <div className='Sidebar'>
       <div className="mt-2">
@@ -30,6 +42,32 @@ export default function SideBar({
         </Form.Group>
         <Button onClick={() => filterTransactions()}>Filter</Button>
       </Form>
+      <Button className="mt-5" onClick={() => setModal(!showModal)}>Transfer</Button>
+      <div>
+      <Modal show={showModal} onHide={() => setModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Transfer</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <span>Send to: </span>
+            <Typeahead
+            id='send to'
+            labelKey="username" 
+            options={data}
+            placeholder="Username"
+            onChange={(e) => saveUserTrans(e)}
+          />
+          <Form.Control type="text" placeholder='Value' className='mt-2' onChange={({ target }) => setValue(Number(target.value))} />
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => {setModal(false);realizeTransfer()}}>
+            Transfer
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      </div>
       <footer className='footer'>
         <Button className='btn' onClick={() => logoff()}>LogOff</Button>
       </footer>
