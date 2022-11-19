@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
-import IconButton from "@material-ui/core/IconButton";
-import InputLabel from "@material-ui/core/InputLabel";
-import Visibility from "@material-ui/icons/Visibility";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Input from "@material-ui/core/Input";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../services";
+import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 import "./Login.page.css"
 
 
@@ -15,14 +12,12 @@ export default function LoginPage() {
 
   const [username, setUser] = useState('');
   const [password, setPass] = useState('');
-  const [btnState, setBtnState] = useState(true);
-  const [passwordShown, setPasswordShown] = useState(false);
+  const [signInBtn, setSignInBtn] = useState(true);
   const [rememberBtn, setRememberBtn] = useState(false)
 
   
   const rememberMeBtn = () => {
-    const btn = document.getElementById('rememberBtn') as HTMLInputElement;
-    if (btn.checked === false) {
+    if (rememberBtn === false) {
       localStorage.removeItem('userInfos')
     } else {
       localStorage.removeItem('userInfos');
@@ -38,9 +33,8 @@ export default function LoginPage() {
   const logIn = async () => {
     const res = await userApi(username, password, 'login');
     if (res !== 'Invalid password' && res !== 'User not found') {
-      localStorage.removeItem('token')
+      localStorage.removeItem('token');
       localStorage.setItem('token', res);
-      rememberMeBtn();
       navigate('/dashboard');
     } else {
       alert(res);
@@ -52,9 +46,9 @@ export default function LoginPage() {
       const regex = /^(?=.*[0-9])(?=.*[A-Z]).{8,}$/;
       const validPass = regex.test(password);
       if (username.length < 3 || !validPass) {
-        setBtnState(true)
+        setSignInBtn(true)
       } else {
-        setBtnState(false)
+        setSignInBtn(false)
       }
       
     };
@@ -78,44 +72,31 @@ export default function LoginPage() {
   }, [])
 
   return (
-    <div>
-       <div>
-        <div>
-          <h3>Hi, Welcome Back</h3>
-          <span>Enter your credentials to continue</span>
+    <Container id="main-container" className="d-grid h-100 main-container">
+      <Form id="sign-in-form" className="text-center w-100">
+        <img 
+        src="https://d1fdloi71mui9q.cloudfront.net/C0NsWW3AQZaixueqIqGd_oT9fQyp9UcgciKK1"
+        className='mb-4 ng-logo'
+        alt="ngLogo"
+        />
+        <h1 className="mb-3 fs-3 fw-normal">Hi, Welcome Back</h1>
+        <p className="fs-6 text-muted">Enter your credentials to continue</p>
+        <Form.Group controlId='sign-in-username'>
+          <Form.Control type='text' size='lg' value={ username } 
+            placeholder='Username'  className='position-relative' onChange={ ({ target }) => setUser(target.value)} />
+        </Form.Group>
+        <Form.Group className='mb-3 mt-1' controlId="sign-in-password">
+          <Form.Control type='password' value={ password } size='lg'
+            placeholder='Password' className='position-relative' onChange={ ({ target }) => setPass(target.value)} />
+        </Form.Group>
+        <Form.Group className="d-flex justify-content-center mb-4" controlId="sign-in-rememberBtn">
+          <Form.Check label="Remember me" checked={ rememberBtn } onChange={ () => setRememberBtn(!rememberBtn) }/>
+        </Form.Group>
+        <div className="d-grid">
+        <Button variant="primary" size="lg" disabled={signInBtn} onClick={() => {logIn();rememberMeBtn()}}>Sign in</Button>
+        <Button variant="primary" size="lg" className="mt-4" onClick={() => {navigate('/register')}}>Dont't have an account?</Button>
         </div>
-        <div>
-          <InputLabel>
-            <span>Username: </span>
-            <Input type="text" value={username} onChange={({ target }) => setUser(target.value)} />
-          </InputLabel>
-          <InputLabel>
-            <span>Password: </span>
-            <Input
-              type={passwordShown ? "text" : "password"}
-              onChange={({ target }: any) => setPass(target.value)}
-              value= { password }
-              endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setPasswordShown(!passwordShown)}
-                >
-                  {passwordShown ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-              }
-            />
-          </InputLabel>
-          <button type="button" disabled={btnState} onClick={() => logIn()}>Login</button>
-          <label>
-            <input type="checkbox" id="rememberBtn" checked={rememberBtn} onChange={ ({ target }) => setRememberBtn(target.checked) }/>
-            <span>Remember me</span>
-          </label>
-        </div>
-        <div>
-          <button type="button" onClick={() => navigate('/register')}>Don't have an account?</button>
-        </div>
-      </div>
-    </div>
+      </Form>
+    </Container>
   );
 };

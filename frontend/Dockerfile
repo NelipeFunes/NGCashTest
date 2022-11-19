@@ -4,7 +4,7 @@ WORKDIR /app-frontend
 
 COPY package* ./
 
-RUN npm install
+RUN npm install --force
 
 COPY . .
 

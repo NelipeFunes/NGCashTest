@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.Sidebar {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 100%;
+  Width: 200px;
+  background-color: #2F4050;
+  color: white;
+  font-size: 19px;
+  position: absolute;
+}
+
+.footer {
+  bottom: 0;
+  width: 100%;
+  position: absolute;
+}
+
+.btn {
+  width: 100%;
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Dashboard from './pages/Dashboard.page';
 import LoginPage from './pages/Login.page';import RegisterPage from './pages/Register.page';
-;
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {

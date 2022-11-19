@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { confirmAlert } from 'react-confirm-alert'; 
-import 'react-confirm-alert/src/react-confirm-alert.css'; 
-import { TranssactionsRes } from "../interface";
-import ComboBox from '../components/AutoComplete'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { TransactionsRes } from "../interface";
+// import ComboBox from '../components/AutoComplete'
 import { 
   getAccount, getCreditedTransactionsDated, getDebitedTransactionsDated, 
   getTransactions, getTransactionsCredited, getTransactionsDated, getTransactionsDebited, 
   makeTransfer } from "../services";
 import './Dashboard.page.css'
+
+import { Button, Container, Form } from "react-bootstrap";
+import SideBar from "../components/Sidebar";
 
 export default function Dashboard() {
   const [balance, setBalance] = useState('');
@@ -68,15 +71,15 @@ export default function Dashboard() {
     if (transactions.length < 1) {
       return 'No transactions have been found';
     }
-    const arara = transactions.map((transaction: TranssactionsRes) => 
-    <div key={transaction.id} className="border">
+    const arara = transactions.map((transaction: TransactionsRes) => 
+    <div key={transaction.id} className="transaction-container">
       <span>{`From: ${normalizeName(transaction.debitedAccount.username)}`}</span>
       <br />
       <span>{`To: ${normalizeName(transaction.creditedAccount.username)}`}</span>
       <br />
       <span>{`Value: ${transaction.value}`}</span>
       <br />
-      <span>{`Fullfilled: ${transaction.createdAt}`}</span>
+      <span>{`Fullfilled: ${moment(transaction.createdAt).format('DD/MM/YYYY')}`}</span>
     </div>
     )
     return arara;
@@ -128,90 +131,74 @@ export default function Dashboard() {
   };
 
   const logOff = () => {
-    localStorage.clear();
-    return navigate('/');
+    confirmAlert({
+      message: 'Confirm logoff',
+      buttons: [
+        { label: 'Yes', onClick:() => { localStorage.removeItem('token');return navigate('/') } }, { label: 'No' }
+      ]
+    })
   }
 
-  const realizeTransfer = async () => {
-    const user = localStorage.getItem('userTrans');
-    if (!user) {
-      return confirmAlert({
-        title: 'Error',
-        message: 'Cash-in account not selected',
-        buttons: [{ label: 'Ok' }]
-      });
-    }
-    const transferFunc = async () => {
-      const res = await makeTransfer(token, user, value);
-      if (res === 'insufficient funds') {
-        confirmAlert({
-          title: 'Error',
-          message: 'Insufficient funds',
-          buttons: [{ label: 'Ok' }]
-        });
-      }
-      if (res === 'value must be greater than 0') {
-        confirmAlert({
-          title: 'Error',
-          message: 'Value must be greater than 0',
-          buttons: [{ label: 'Ok' }]
-        });
-      }
+  // const realizeTransfer = async () => {
+  //   const user = localStorage.getItem('userTrans');
+  //   if (!user) {
+  //     return confirmAlert({
+  //       title: 'Error',
+  //       message: 'Cash-in account not selected',
+  //       buttons: [{ label: 'Ok' }]
+  //     });
+  //   }
+  //   const transferFunc = async () => {
+  //     const res = await makeTransfer(token, user, value);
+  //     if (res === 'insufficient funds') {
+  //       confirmAlert({
+  //         title: 'Error',
+  //         message: 'Insufficient funds',
+  //         buttons: [{ label: 'Ok' }]
+  //       });
+  //     }
+  //     if (res === 'value must be greater than 0') {
+  //       confirmAlert({
+  //         title: 'Error',
+  //         message: 'Value must be greater than 0',
+  //         buttons: [{ label: 'Ok' }]
+  //       });
+  //     }
     
-    await getBalance(token);
-    await getTransFromDB(token)
-    }
-    const text = `Are you sure you to make a transfer to ${user}, in the value of R$ ${Number(value).toFixed(2)}?`;
-    confirmAlert({
-      title: 'Confirmation',
-      message: text,
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () => transferFunc(),
-        },
-        {
-          label: 'No',
-        }
-      ]
-    });
-  }
+  //   await getBalance(token);
+  //   await getTransFromDB(token)
+  //   }
+  //   const text = `Are you sure you to make a transfer to ${user}, in the value of R$ ${Number(value).toFixed(2)}?`;
+  //   confirmAlert({
+  //     title: 'Confirmation',
+  //     message: text,
+  //     buttons: [
+  //       {
+  //         label: 'Yes',
+  //         onClick: () => transferFunc(),
+  //       },
+  //       {
+  //         label: 'No',
+  //       }
+  //     ]
+  //   });
+  // }
 
   return (
     <div>
-      <div>
-        <span>{`${username}`}</span>
-      </div>
-      <div>
-        <span>{`R$ ${balance}`}</span>
-      </div>
-      <div>
-        <span>Filters: </span>
-        <label>
-          <input type="checkbox"  checked={debBtn} onChange={({ target }) => {setDebBtn(target.checked);setCredBtn(!target.value);}} />
-          <span>Cash out</span>
-        </label>
-        <label>
-          <input type="checkbox" checked={credBtn} onChange={({ target }) => {setCredBtn(target.checked); setDebBtn(!target.value); }} />
-          <span>Cash in</span>
-        </label>
-        <label>
-          <input type="checkbox" checked={dateBtn} onChange={(({target}) => setDateBtn(target.checked))} />
-          <span>By date: </span>
-        </label>
-          <input type="date" value={date} onChange={({target}) => setDate(target.value)} />
-        
-        <button type="button" onClick={() => filterTransactions()}>Filter</button>
-       { renderTransactions() }
-      </div>
-      <div className="border">
-        <span>Send to: </span>
-        <ComboBox />
-        <span>Value: </span>
-        <input type="number" value={ value } onChange={ ({ target }: any) => setValue(target.value)}  />
-        <button onClick={() => realizeTransfer()}>Tranfer</button>
-      </div>
-      <button type="button" onClick={() => logOff()}>Logoff</button>
+      <SideBar 
+        username={username}
+        balance={balance}
+        date={date}
+        credBtn={credBtn}
+        debBtn={debBtn}
+        setDate={setDate}
+        logoff={logOff}
+        setCredBtn={setCredBtn}
+        setDebBtn={setDebBtn}
+        setDateBtn={setDateBtn}
+        filterTransactions={filterTransactions}
+        />
     </div>
   )
 }
