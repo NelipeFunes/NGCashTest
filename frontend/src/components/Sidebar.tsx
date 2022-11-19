@@ -69,7 +69,7 @@ export default function SideBar({
       </Modal>
       </div>
       <footer className='footer'>
-        <Button className='btn' onClick={() => logoff()}>LogOff</Button>
+        <Button className='btn' onClick={() => logoff()}>Logout</Button>
       </footer>
     </div>
   )
