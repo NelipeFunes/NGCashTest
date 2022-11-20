@@ -15,7 +15,7 @@ Transferências por data e transferências enviadas ou recebidas.
  - Construído seguindo modelo REST, feito 100% em Typescript;
  
 🐋 **Docker:**
- - Cada camada da aplicação (front, back e db) conta com um Dockerfile, além de orquestração docker para dar conta de subir tudo junto ao mesmo tempo;
+ - Toda a aplicação é dockerizada com dockerfile no front e back end
 
  🔙 **Front-end:**
  - Feito em React, CSS e Bootstrap
