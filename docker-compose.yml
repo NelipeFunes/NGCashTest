@@ -16,6 +16,7 @@ services:
     build: ./backend
     ports:
       - 3010:3010
+    command: npm run db:start
     working_dir: /app-backend
     tty: true
     depends_on:

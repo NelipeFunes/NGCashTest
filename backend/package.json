@@ -10,7 +10,7 @@
     "db:migrate": "npx -y tsc && npx sequelize db:migrate",
     "build": "tsc",
     "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-    "db:start": "npx -y tsc && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "db:start": "npm run db:reset && npm start"
   },
   "keywords": [],
   "author": "",

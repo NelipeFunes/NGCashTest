@@ -13,4 +13,4 @@ RUN npx tsc
 
 EXPOSE 3010
 
-CMD ["npm", "start"]
+CMD ["npm", "run",  "db:start"]
