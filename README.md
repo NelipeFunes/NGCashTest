@@ -36,7 +36,9 @@ Na pasta raiz, rode o comando para realizar o compose
   docker-compose up -d
 ``` 
 
-Pronto! Agora é só esperar o compose finalizar Pega um copo de água enquanto isso 🥤
+Agora é só esperar o compose finalizar Pega um copo de água enquanto isso 🥤
+
+Depois de finalizado, acesse o [link](https://localhost:3000/) para visualizar a aplicação.
 
 </details> 
 
