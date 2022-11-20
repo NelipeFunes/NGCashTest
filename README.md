@@ -15,10 +15,10 @@ Transferências por data e transferências enviadas ou recebidas.
  - Construído seguindo modelo REST, feito 100% em Typescript;
  
 🐋 **Docker:**
- - Toda a aplicação é dockerizada com dockerfile no front e back end
+ - Toda a aplicação é dockerizada com dockerfile no front e back end;
 
  🔙 **Front-end:**
- - Feito em React, CSS e Bootstrap
+ - Feito em React, CSS e Bootstrap;
  
  </details> 
  
