@@ -1,8 +1,8 @@
 # NG Cash
 
 Este projeto se trata de uma aplicação Fullstack Monorepo construída como parte do teste técnico para vaga na [NGcash!](https://ng.cash/)  
-Trata-se de um portal gerencial para ver, editar, cadastrar e remover clientes
-
+Trata-se de um banco digital, onde é possivel se cadastradar, e ver suas transferências com os seguintes filtros:
+Transferências por data e transferências enviadas ou recebidas.
 # Stacks do projeto 🔍
 
 <details>
