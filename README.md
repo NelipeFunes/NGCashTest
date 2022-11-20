@@ -42,8 +42,3 @@ Depois de finalizado, acesse o [link](https://localhost:3000/) para visualizar a
 
 </details> 
 
-
-<details> 
-<summary>Windows</summary> </br>
-
-</details> 
