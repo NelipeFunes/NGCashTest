@@ -5,7 +5,7 @@ Trata-se de um portal gerencial para ver, editar, cadastrar e remover clientes
 
 # Stacks do projeto 🔍
 
-<details> 
+<details>
 <summary>Possui as seguintes tecnologias</summary> <br>
 
 📊 **Banco de dados:**
@@ -25,75 +25,26 @@ Trata-se de um portal gerencial para ver, editar, cadastrar e remover clientes
 
 ## Instalação
 
-Por se tratar de monorepo, recomenda-se a utilização de docker para a instalação e execução do projeto. Aqui farei o passo a passo em ambos os casos
+Aqui vai o passo a passo de como rodar a aplicação no seu PC.
 
 <details> 
-<summary>Com Docker</summary> </br>
-
-Instale as dependências
-
-```bash
-  npm install ou npm i
-```
+<summary>Linux</summary> </br>
 
 Na pasta raiz, rode o comando para realizar o compose
 
    ```bash
-  npm run compose:up:dev
+  docker-compose up -d
 ``` 
 
-Pronto! Agora é só esperar as camadas montarem! Pega um café enquanto isso ☕
+Pronto! Agora é só esperar o compose finalizar Pega um copo de água enquanto isso 🥤
 
 </details> 
 
 
 <details> 
-<summary>Sem Docker</summary> </br>
-
-Instale as dependências
-
-```bash
-  npm install ou npm i
-```
-
-Vá na pasta de cada camada e instale suas dependências
-
-   ```bash
-    cd packages/server
-    npm i
-
-    cd packages/web
-    npm i
-``` 
-Para rodar a aplicação:
-
-```bash
-    cd packages/server
-    npm run dev
-
-    cd packages/web
-    npm start
-``` 
+<summary>Windows</summary> </br>
 
 </details> 
-
-#### Obs.:
-
-Ao intalar o projeto e rodar, o servidor irá realizar um dump no banco de dados com o primeiro usuário para poder testar a aplicação sem problemas  
-Credenciais  
-```bash
-    name: 'Primeiro Usuário',
-    email: 'usuario@email.com',
-    password: 'firstUserPassword'
-``` 
-## Rodando os testes
-
-Para rodar os testes presentes na camada de back-end, rode o seguinte comando
-
-```bash
-  cd packages/server
-  npm run test
-```
 
 
 ## Documentação da API
